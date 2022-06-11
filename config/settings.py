@@ -59,6 +59,12 @@ MIDDLEWARE = [
 #     "http://localhost:8080",
 #     "http://127.0.0.1:9000",
 # ]
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+}
+AUTH_USER_MODEL = 'accounts.Customer'
 
 ROOT_URLCONF = 'config.urls'
 
