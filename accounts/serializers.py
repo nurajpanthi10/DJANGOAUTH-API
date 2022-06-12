@@ -27,3 +27,29 @@ class CustomerLoginSerializer(serializers.ModelSerializer):
   class Meta:
     model = Customer
     fields = ['email', 'password']
+
+
+class CustomerProfileSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = Customer
+    fields = ['id', 'email', 'name']
+
+
+class CustomerChangePasswordSerializer(serializers.ModelSerializer):
+  password = serializers.CharField(max_length=255, style={'input_type':'password'}, write_only=True)
+  password2 = serializers.CharField(max_length=255, style={'input_type':'password'}, write_only=True)
+  class Meta:
+    model = Customer
+    fields = ['password', 'password2']
+
+  def validate(self, attrs):
+    password = attrs.get('password')
+    password2 = attrs.get('password2')
+    user = self.context.get('user')
+    if password != password2 :
+      raise serializers.ValidationError("Password and Confirm Password doesn't match.")
+    user.set_password(password)
+    user.save()
+    return attrs
+
+
